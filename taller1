@@ -1,0 +1,77 @@
+#include <stdio.h>
+
+int main() {
+    int id, cantidad = 0, unidadesdeventa, opcion;
+    char nombre[30];
+    float preciodeventadelproducto, valortotal, costodelproducto, gananciatotal;
+    float ventasTotales = 0, gananciasTotales = 0; 
+
+    printf("Vamos a registrar el producto\n");
+    printf("Ingrese el nombre del producto \n");
+    scanf("%s", nombre); 
+    printf("Ingrese el ID del producto \n");
+    scanf("%d", &id);
+    printf("Registro exitoso\n"); 
+
+    do {
+        printf("\nIngrese el numero de opcion que necesita\n");
+        printf(" Opcion 1: Vender\n Opcion 2: Reabastecer\n Opcion 3: Consultar\n Opcion 0: Salir\n");
+        scanf("%d", &opcion);
+
+        switch (opcion) {
+            case 1: 
+                printf("¿Cuanto le costo a usted el producto?\n");
+                scanf("%f", &costodelproducto);
+                printf("¿Cual es el precio de venta del producto?\n");
+                scanf("%f", &preciodeventadelproducto);
+                printf("¿Cuantas unidades desea vender?\n");
+                scanf("%d", &unidadesdeventa);
+
+                if (unidadesdeventa <= cantidad) {
+                    cantidad = cantidad - unidadesdeventa; 
+                    valortotal = preciodeventadelproducto * unidadesdeventa;
+                    gananciatotal = (preciodeventadelproducto - costodelproducto) * unidadesdeventa;
+
+                    
+                    ventasTotales = ventasTotales+ valortotal;
+                    gananciasTotales = gananciasTotales+ gananciatotal;
+
+                    printf("Venta realizada con exito.\n");
+                    printf("Stock actual: %d\n", cantidad);
+                    printf("Valor de esta venta: $ %f\n", valortotal);
+                    printf("Ganancia de esta venta: $ %f\n", gananciatotal);
+                } else {
+                    printf("Stock insuficiente. Solo tienes %d unidades.\n", cantidad);
+                }
+                break;
+
+            case 2: 
+                {
+                    int agregar;
+                    printf("Ingrese la cantidad a reabastecer: ");
+                    scanf("%d", &agregar);
+                    cantidad = cantidad+ agregar; 
+                    printf("Stock actualizado: %d unidades\n", cantidad);
+                }
+                break;
+
+            case 3:
+                printf("\nCONSULTA DEL PRODUCTO\n");
+                printf("Nombre: %s\n", nombre);
+                printf("ID: %d\n", id);
+                printf("Stock actual: %d\n", cantidad);
+                printf("Ventas acumuladas: $ %f\n", ventasTotales);
+                printf("Ganancias acumuladas: $ %f\n", gananciasTotales);
+                break;
+
+            case 0:
+                printf("Saliendo del programa...\n");
+                break;
+
+            default:
+                printf("Opcion no valida. Intente de nuevo.\n");
+        }
+    } while (opcion != 0);
+
+    return 0;
+}
