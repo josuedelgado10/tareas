@@ -1,0 +1,78 @@
+#include <stdio.h>
+
+int main() {
+    float calificaciones[5][3];
+    float promedio_estudiante[5];
+    float promedio_asignatura[3];
+    float nota_max_estudiantes[5], nota_min_estudiantes[5];
+    float nota_max_asignaturas[3], nota_min_asignaturas[3];
+    int aprobados[3] = {0};
+    int reprobados[3] = {0};
+
+    for (int i = 0; i < 5; i++) {
+        for (int j = 0; j < 3; j++) {
+            do {
+                printf("ingrese calificacion del estudiante %d en la asignatura %d (0 - 10): ", i + 1, j + 1);
+                scanf("%f", &calificaciones[i][j]);
+                if (calificaciones[i][j] < 0 || calificaciones[i][j] > 10) {
+                    printf("error. la calificacion debe estar entre 0 y 10.\n");
+                }
+            } while (calificaciones[i][j] < 0 || calificaciones[i][j] > 10);
+        }
+    }
+
+    for (int i = 0; i < 5; i++) {
+        float suma = 0;
+        nota_max_estudiantes[i] = calificaciones[i][0];
+        nota_min_estudiantes[i] = calificaciones[i][0];
+
+        for (int j = 0; j < 3; j++) {
+            float nota = calificaciones[i][j];
+            suma += nota;
+
+            if (nota > nota_max_estudiantes[i]) nota_max_estudiantes[i] = nota;
+            if (nota < nota_min_estudiantes[i]) nota_min_estudiantes[i] = nota;
+        }
+        promedio_estudiante[i] = suma / 3;
+    }
+
+    for (int j = 0; j < 3; j++) {
+        float suma = 0;
+        nota_max_asignaturas[j] = calificaciones[0][j];
+        nota_min_asignaturas[j] = calificaciones[0][j];
+
+        for (int i = 0; i < 5; i++) {
+            float nota = calificaciones[i][j];
+            suma += nota;
+
+            if (nota > nota_max_asignaturas[j]) nota_max_asignaturas[j] = nota;
+            if (nota < nota_min_asignaturas[j]) nota_min_asignaturas[j] = nota;
+
+            if (nota >= 6) aprobados[j]++;
+            else reprobados[j]++;
+        }
+        promedio_asignatura[j] = suma / 5;
+    }
+
+    printf("\n resultados\n");
+
+    printf("\npromedio por estudiante:\n");
+    for (int i = 0; i < 5; i++) {
+        printf("estudiante %d: %.2f (nota maxima: %.2f, nota minima: %.2f)\n", 
+               i + 1, promedio_estudiante[i], nota_max_estudiantes[i], nota_min_estudiantes[i]);
+    }
+
+    printf("\npromedio por asignatura:\n");
+    for (int j = 0; j < 3; j++) {
+        printf("asignatura %d: %.2f (nota maxima: %.2f, nota minima: %.2f)\n", 
+               j + 1, promedio_asignatura[j], nota_max_asignaturas[j], nota_min_asignaturas[j]);
+    }
+
+    printf("\naprobados y reprobados por asignatura:\n");
+    for (int j = 0; j < 3; j++) {
+        printf("asignatura %d: aprobados: %d, reprobados: %d\n",
+               j + 1, aprobados[j], reprobados[j]);
+    }
+
+    return 0;
+}
