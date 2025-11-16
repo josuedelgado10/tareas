@@ -11,11 +11,11 @@ void eliminarProducto(char productos[][100], int cantidad[], float tiempoPorUnid
 void mostrarResumen(char productos[][100], int cantidad[], float tiempoPorUnidad[], float recursosPorUnidad[], int n, float tiempoDisp, float recursosDisp);
  
 int main() {
-    printf("¿Cuál es el máximo de productos?: ");
+    printf("¿Cuál es el máximo de productos entre 0 y 100?: ");
     scanf("%d", &maxProd);
     if(maxProd <= 0 || maxProd > 100) maxProd = 50;
  
-    printf("¿Cuál es el máximo de caracteres para el nombre?: ");
+    printf("¿Cuál es el máximo de caracteres para el nombre entre 0 y 100?: ");
     scanf("%d", &maxNombre);
     if(maxNombre <= 0 || maxNombre > 100) maxNombre = 30;
  
