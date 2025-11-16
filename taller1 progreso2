@@ -3,7 +3,7 @@
 int maxProd = 50;
 int maxNombre = 30;
  
-// --- Prototipos ---
+//  Prototipos 
 int buscarProducto(char productos[][100], int n, char *nombre);
 void agregarProducto(char productos[][100], int cantidad[], float tiempoPorUnidad[], float recursosPorUnidad[], int *n);
 void editarProducto(char productos[][100], int cantidad[], float tiempoPorUnidad[], float recursosPorUnidad[], int n);
@@ -11,11 +11,11 @@ void eliminarProducto(char productos[][100], int cantidad[], float tiempoPorUnid
 void mostrarResumen(char productos[][100], int cantidad[], float tiempoPorUnidad[], float recursosPorUnidad[], int n, float tiempoDisp, float recursosDisp);
  
 int main() {
-    printf("¿Cuál es el máximo de productos? (por defecto 50): ");
+    printf("¿Cuál es el máximo de productos?: ");
     scanf("%d", &maxProd);
     if(maxProd <= 0 || maxProd > 100) maxProd = 50;
  
-    printf("¿Cuál es el máximo de caracteres para el nombre? (por defecto 30): ");
+    printf("¿Cuál es el máximo de caracteres para el nombre?: ");
     scanf("%d", &maxNombre);
     if(maxNombre <= 0 || maxNombre > 100) maxNombre = 30;
  
@@ -171,7 +171,7 @@ void eliminarProducto(char productos[][100], int cantidad[], float tiempoPorUnid
  
 void mostrarResumen(char productos[][100], int cantidad[], float tiempoPorUnidad[], float recursosPorUnidad[], int n, float tiempoDisp, float recursosDisp) {
     float tiempoTotal = 0, recursosTotales = 0;
-    printf("\n--- RESUMEN DE PRODUCCIÓN ---\n");
+    printf("\n RESUMEN DE PRODUCCIÓN \n");
     printf("Tiempo disponible: %.2f\n", tiempoDisp);
     printf("Recursos disponibles: %.2f\n", recursosDisp);
  
