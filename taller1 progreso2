@@ -1,0 +1,194 @@
+#include <stdio.h>
+#include <string.h>
+int maxProd = 50;
+int maxNombre = 30;
+ 
+// --- Prototipos ---
+int buscarProducto(char productos[][100], int n, char *nombre);
+void agregarProducto(char productos[][100], int cantidad[], float tiempoPorUnidad[], float recursosPorUnidad[], int *n);
+void editarProducto(char productos[][100], int cantidad[], float tiempoPorUnidad[], float recursosPorUnidad[], int n);
+void eliminarProducto(char productos[][100], int cantidad[], float tiempoPorUnidad[], float recursosPorUnidad[], int *n);
+void mostrarResumen(char productos[][100], int cantidad[], float tiempoPorUnidad[], float recursosPorUnidad[], int n, float tiempoDisp, float recursosDisp);
+ 
+int main() {
+    printf("¿Cuál es el máximo de productos? (por defecto 50): ");
+    scanf("%d", &maxProd);
+    if(maxProd <= 0 || maxProd > 100) maxProd = 50;
+ 
+    printf("¿Cuál es el máximo de caracteres para el nombre? (por defecto 30): ");
+    scanf("%d", &maxNombre);
+    if(maxNombre <= 0 || maxNombre > 100) maxNombre = 30;
+ 
+    // Definimos los arreglos con tamaño máximo fijo y lo usamos
+    char productos[100][100] = {0};
+    int cantidad[100] = {0};
+    float tiempoPorUnidad[100] = {0};
+    float recursosPorUnidad[100] = {0};
+    int n = 0;
+ 
+    float tiempoDisponible, recursosDisponibles;
+    int opcion;
+    char temp[128];
+ 
+    printf(" SISTEMA CASERO DE PRODUCCIÓN \n");
+    printf("Ingrese el tiempo total disponible en la fábrica: ");
+    scanf("%f", &tiempoDisponible);
+ 
+    printf("Ingrese los recursos totales disponibles en la fábrica: ");
+    scanf("%f", &recursosDisponibles);
+    fgets(temp, sizeof(temp), stdin); // limpiar el salto de línea extra
+ 
+    do {
+        printf("\n MENU \n");
+        printf("1. Ingresar producto\n");
+        printf("2. Editar producto\n");
+        printf("3. Eliminar producto\n");
+        printf("4. Mostrar resumen\n");
+        printf("5. Salir\n");
+        printf("Seleccione una opción: ");
+ 
+        fgets(temp, sizeof(temp), stdin);
+        sscanf(temp, "%d", &opcion);
+ 
+        switch(opcion) {
+            case 1:
+                agregarProducto(productos, cantidad, tiempoPorUnidad, recursosPorUnidad, &n);
+                break;
+            case 2:
+                editarProducto(productos, cantidad, tiempoPorUnidad, recursosPorUnidad, n);
+                break;
+            case 3:
+                eliminarProducto(productos, cantidad, tiempoPorUnidad, recursosPorUnidad, &n);
+                break;
+            case 4:
+                mostrarResumen(productos, cantidad, tiempoPorUnidad, recursosPorUnidad, n, tiempoDisponible, recursosDisponibles);
+                break;
+            case 5:
+                printf("Programa finalizado.\n");
+                break;
+            default:
+                printf("Opción no válida.\n");
+        }
+ 
+    } while (opcion != 5);
+ 
+    return 0;
+}
+ 
+int buscarProducto(char productos[][100], int n, char *nombre) {
+    for(int i = 0; i < n; i++) {
+        if(strcmp(productos[i], nombre) == 0)
+            return i;
+    }
+    return -1;
+}
+ 
+void agregarProducto(char productos[][100], int cantidad[], float tiempoPorUnidad[], float recursosPorUnidad[], int *n) {
+    if(*n < maxProd) {
+        char temp[128];
+        printf("Ingrese nombre del producto: ");
+        fgets(temp, maxNombre + 2, stdin);
+        temp[strcspn(temp, "\n")] = '\0';
+        strncpy(productos[*n], temp, maxNombre);
+        productos[*n][maxNombre] = '\0';
+ 
+        printf("Ingrese cantidad demandada: ");
+        fgets(temp, sizeof(temp), stdin);
+        sscanf(temp, "%d", &cantidad[*n]);
+ 
+        printf("Ingrese tiempo de fabricación por unidad: ");
+        fgets(temp, sizeof(temp), stdin);
+        sscanf(temp, "%f", &tiempoPorUnidad[*n]);
+ 
+        printf("Ingrese recursos requeridos por unidad: ");
+        fgets(temp, sizeof(temp), stdin);
+        sscanf(temp, "%f", &recursosPorUnidad[*n]);
+ 
+        (*n)++;
+        printf("Producto agregado correctamente.\n");
+    } else {
+        printf("Límite de productos alcanzado (%d).\n", maxProd);
+    }
+}
+ 
+void editarProducto(char productos[][100], int cantidad[], float tiempoPorUnidad[], float recursosPorUnidad[], int n) {
+    char temp[128];
+    printf("Ingrese el nombre del producto a editar: ");
+    fgets(temp, maxNombre + 2, stdin);
+    temp[strcspn(temp, "\n")] = '\0';
+ 
+    int pos = buscarProducto(productos, n, temp);
+    if(pos != -1) {
+        printf("Producto encontrado: %s\n", productos[pos]);
+ 
+        printf("Nuevo nombre (Enter para no cambiar): ");
+        fgets(temp, maxNombre + 2, stdin);
+        temp[strcspn(temp, "\n")] = '\0';
+        if(strlen(temp) > 0)
+            strncpy(productos[pos], temp, maxNombre);
+ 
+        printf("Nueva cantidad demandada (anterior: %d): ", cantidad[pos]);
+        fgets(temp, sizeof(temp), stdin);
+        int nuevaCantidad;
+        if(sscanf(temp, "%d", &nuevaCantidad) == 1) cantidad[pos] = nuevaCantidad;
+ 
+        printf("Nuevo tiempo por unidad (anterior: %.2f): ", tiempoPorUnidad[pos]);
+        fgets(temp, sizeof(temp), stdin);
+        float nuevoTiempo;
+        if(sscanf(temp, "%f", &nuevoTiempo) == 1) tiempoPorUnidad[pos] = nuevoTiempo;
+ 
+        printf("Nuevos recursos por unidad (anterior: %.2f): ", recursosPorUnidad[pos]);
+        fgets(temp, sizeof(temp), stdin);
+        float nuevosRec;
+        if(sscanf(temp, "%f", &nuevosRec) == 1) recursosPorUnidad[pos] = nuevosRec;
+ 
+        printf("Producto editado correctamente.\n");
+    } else {
+        printf("Producto no encontrado.\n");
+    }
+}
+ 
+void eliminarProducto(char productos[][100], int cantidad[], float tiempoPorUnidad[], float recursosPorUnidad[], int *n) {
+    char temp[128];
+    printf("Ingrese el nombre del producto a eliminar: ");
+    fgets(temp, maxNombre + 2, stdin);
+    temp[strcspn(temp, "\n")] = '\0';
+ 
+    int pos = buscarProducto(productos, *n, temp);
+    if(pos != -1) {
+        for(int i = pos; i < (*n)-1; i++) {
+            strcpy(productos[i], productos[i+1]);
+            cantidad[i] = cantidad[i+1];
+            tiempoPorUnidad[i] = tiempoPorUnidad[i+1];
+            recursosPorUnidad[i] = recursosPorUnidad[i+1];
+        }
+        (*n)--;
+        printf("Producto eliminado correctamente.\n");
+    } else {
+        printf("Producto no encontrado.\n");
+    }
+}
+ 
+void mostrarResumen(char productos[][100], int cantidad[], float tiempoPorUnidad[], float recursosPorUnidad[], int n, float tiempoDisp, float recursosDisp) {
+    float tiempoTotal = 0, recursosTotales = 0;
+    printf("\n--- RESUMEN DE PRODUCCIÓN ---\n");
+    printf("Tiempo disponible: %.2f\n", tiempoDisp);
+    printf("Recursos disponibles: %.2f\n", recursosDisp);
+ 
+    for(int i = 0; i < n; i++) {
+        float t = cantidad[i] * tiempoPorUnidad[i];
+        float r = cantidad[i] * recursosPorUnidad[i];
+        tiempoTotal += t;
+        recursosTotales += r;
+        printf("%d) %s - Cantidad: %d, Tiempo total: %.2f, Recursos total: %.2f\n", i+1, productos[i], cantidad[i], t, r);
+    }
+ 
+    printf("Tiempo total requerido: %.2f\n", tiempoTotal);
+    printf("Recursos totales requeridos: %.2f\n", recursosTotales);
+ 
+    if(tiempoTotal <= tiempoDisp && recursosTotales <= recursosDisp) {
+        printf("La fábrica puede cumplir con la demanda.\n");
+    } else {
+        printf("La fábrica NO puede cumplir con la demanda.\n");
+    }
+}
