@@ -1,0 +1,4 @@
+1 camioneta Chevrolet DMax 2018 13500.00 1 0
+2 camioneta Chevrolet Silverado 2017 14500.00 1 1
+3 camioneta Toyota Hilux 2019 18000.00 1 1
+4 auto Chevrolet Spark 2020 9000.00 1 1
