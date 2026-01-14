@@ -1,0 +1,102 @@
+#include <stdio.h>
+#include <stdlib.h>
+
+#define ZONAS 5
+#define DIAS 30
+
+#define LIM_CO2 400
+#define LIM_SO2 20
+#define LIM_NO2 40
+#define LIM_PM25 25
+
+typedef struct {
+    float co2;
+    float so2;
+    float no2;
+    float pm25;
+} Contaminacion;
+
+typedef struct {
+    char nombre[30];
+    Contaminacion historial[DIAS];
+    Contaminacion actual;
+} Zona;
+
+float promedio(float datos[], int n) {
+    float suma = 0;
+    for(int i = 0; i < n; i++)
+        suma += datos[i];
+    return suma / n;
+}
+
+float promedioPonderado(float datos[], int n) {
+    float suma = 0, peso = 0;
+    for(int i = 0; i < n; i++) {
+        suma += datos[i] * (i + 1);
+        peso += (i + 1);
+    }
+    return suma / peso;
+}
+
+void verificarAlerta(float valor, float limite, char *contaminante) {
+    if (valor > limite) {
+        printf("ALERTA: %s excede el límite (%0.2f)\n", contaminante, valor);
+    }
+}
+
+void recomendaciones(float pm25) {
+    if (pm25 > LIM_PM25) {
+        printf("Recomendaciones:\n");
+        printf("- Reducir tráfico vehicular\n");
+        printf("- Suspender actividades al aire libre\n");
+        printf("- Control temporal de industrias\n");
+    }
+}
+
+void guardarReporte(Zona zonas[]) {
+    FILE *archivo = fopen("reporte_contaminacion.txt", "w");
+    if (!archivo) return;
+
+    for (int i = 0; i < ZONAS; i++) {
+        fprintf(archivo, "Zona: %s\n", zonas[i].nombre);
+        fprintf(archivo, "CO2: %.2f | SO2: %.2f | NO2: %.2f | PM2.5: %.2f\n\n",
+                zonas[i].actual.co2, zonas[i].actual.so2,
+                zonas[i].actual.no2, zonas[i].actual.pm25);
+    }
+    fclose(archivo);
+}
+
+int main() {
+    Zona zonas[ZONAS] = {
+        {"Centro"}, {"Norte"}, {"Sur"}, {"Este"}, {"Oeste"}
+    };
+
+    for(int i = 0; i < ZONAS; i++) {
+        for(int d = 0; d < DIAS; d++) {
+            zonas[i].historial[d].co2 = 350 + rand() % 100;
+            zonas[i].historial[d].so2 = 10 + rand() % 20;
+            zonas[i].historial[d].no2 = 20 + rand() % 30;
+            zonas[i].historial[d].pm25 = 15 + rand() % 20;
+        }
+        zonas[i].actual = zonas[i].historial[DIAS - 1];
+    }
+
+    
+    for(int i = 0; i < ZONAS; i++) {
+        float pm25[DIAS];
+        for(int d = 0; d < DIAS; d++)
+            pm25[d] = zonas[i].historial[d].pm25;
+
+        float prediccion = promedioPonderado(pm25, DIAS);
+
+        printf("\nZona: %s\n", zonas[i].nombre);
+        verificarAlerta(zonas[i].actual.pm25, LIM_PM25, "PM2.5");
+        printf("Predicción PM2.5 (24h): %.2f\n", prediccion);
+        recomendaciones(prediccion);
+    }
+
+    guardarReporte(zonas);
+    printf("\nReporte generado correctamente\n");
+
+    return 0;
+}
