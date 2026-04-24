@@ -1,0 +1,76 @@
+public class FrecuenciaCardiaca1 {
+
+    private String nombre;
+    private String apellido;
+    private int dia;
+    private int mes;
+    private int anio;
+
+    public FrecuenciaCardiaca1(String nombre, String apellido, int dia, int mes, int anio){
+        this.nombre = nombre;
+        this.apellido = apellido;
+        this.dia = dia;
+        this.mes = mes;
+        this.anio = anio;
+
+    }
+
+    public String getNombre(){
+        return nombre;
+    }
+    public void setNombre(String nombre) {
+        this.nombre = nombre;
+    }
+
+
+    public String getApellido(){
+        return apellido;
+    }
+    public void setApellido(String apellido) {
+        this.apellido = apellido;
+    }
+
+    public int getDia(){
+            return dia;
+    }
+    public void setDia(int dia) {
+        if(dia > 0 && dia <= 31){
+        this.dia = dia;}
+        else{
+            System.out.println("Error, solo se permiten fechas entre 1 y 31");
+        }
+    }
+
+    public int getMes(){
+        return mes;
+    }
+    public void setMes(int mes) {
+        if(mes > 0 && mes <= 12){
+        this.mes = mes;}
+        else{
+            System.out.println("Error, solo se permiten fechas entre 1 y 12");
+        }
+    }
+
+    public int getAnio(){
+        return anio;
+    }
+    public void setAnio(int anio) {
+        this.anio = anio;
+    }
+
+    public int CalcularEdad(){
+        return (2026 - anio);
+    }
+
+    public int CalcularFrecuenciaMax(){
+        return (220 - CalcularEdad());
+    }
+
+    public int FrecuenciaCardiacaEsperada1(){
+        return ((CalcularFrecuenciaMax()*50)/100);
+    }
+    public int FrecuenciaCardiacaEsperada2(){
+        return ((CalcularFrecuenciaMax()*80)/100);
+    }
+}
