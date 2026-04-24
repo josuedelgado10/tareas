@@ -1,0 +1,74 @@
+import java.time.LocalDate;
+
+public class PerfilMedico {
+
+    private String nombre;
+    private String apellido;
+    private String sexo;
+    private int dia;
+    private int mes;
+    private int anio;
+    private double altura;
+    private double peso;
+
+    // Constructor
+    public PerfilMedico(String nombre, String apellido, String sexo,
+                        int dia, int mes, int anio,
+                        double altura, double peso) {
+        this.nombre = nombre;
+        this.apellido = apellido;
+        this.sexo = sexo;
+        this.dia = dia;
+        this.mes = mes;
+        this.anio = anio;
+        this.altura = altura;
+        this.peso = peso;
+    }
+
+    // Métodos get
+    public String getNombre() { return nombre; }
+    public String getApellido() { return apellido; }
+    public String getSexo() { return sexo; }
+    public int getDia() { return dia; }
+    public int getMes() { return mes; }
+    public int getAnio() { return anio; }
+    public double getAltura() { return altura; }
+    public double getPeso() { return peso; }
+
+
+    public int calcularEdad() {
+        LocalDate hoy = LocalDate.now();
+        int edad = hoy.getYear() - anio;
+
+        if (hoy.getMonthValue() < mes) {
+            edad = edad - 1;
+        } else if (hoy.getMonthValue() == mes && hoy.getDayOfMonth() < dia) {
+            edad = edad - 1;
+        }
+
+        return edad;
+    }
+
+
+    public int frecuenciaMaxima() {
+        return 220 - calcularEdad();
+    }
+
+
+    public String frecuenciaEsperada() {
+        int max = frecuenciaMaxima();
+
+        double minimo = max * 0.50;
+        double maximo = max * 0.85;
+
+        return minimo + " - " + maximo + " pulsaciones por minuto";
+    }
+
+    // Índice de masa corporal (BMI)
+    public double calcularBMI() {
+        double alturaMetros = altura / 100;
+        return peso / (alturaMetros * alturaMetros);
+    }
+
+
+}
