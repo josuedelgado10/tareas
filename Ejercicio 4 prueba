@@ -1,0 +1,32 @@
+import java.util.Scanner;
+
+public class PruebaFrecuenciaCardiaca {
+    public static void main(String[] args){
+
+
+        Scanner entrada = new Scanner(System.in);
+        System.out.println("Nombre: ");
+        String nombre = entrada.nextLine();
+
+        System.out.print("Apellido: ");
+        String apellido = entrada.nextLine();
+
+        System.out.print("Día de nacimiento: ");
+        int dia = entrada.nextInt();
+
+        System.out.print("Mes de nacimiento: ");
+        int mes = entrada.nextInt();
+
+        System.out.print("Año de nacimiento: ");
+        int anio = entrada.nextInt();
+
+        FrecuenciaCardiaca1 paciente = new FrecuenciaCardiaca1(nombre, apellido, dia, mes, anio);
+
+        System.out.println("Datos");
+        System.out.println("Nombre:" + paciente.getNombre() + paciente.getApellido());
+        System.out.println("Fecha de nacimiento:" + paciente.getDia()+ "/" + paciente.getMes()+ "/" + paciente.getAnio());
+        System.out.println("Edad:" + paciente.CalcularEdad() + "años");
+        System.out.println("Frecuencia Maxima:" + paciente.CalcularFrecuenciaMax());
+        System.out.println("Frecuencia Esperada:" + "entre" + paciente.FrecuenciaCardiacaEsperada1() + "y" + paciente.FrecuenciaCardiacaEsperada2());
+    }
+}
